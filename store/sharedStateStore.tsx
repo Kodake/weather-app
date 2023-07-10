@@ -17,7 +17,7 @@ class SharedStateStore {
     }
 
     mostrarAlerta() {
-        Alert.alert(ALERT_MESSAGES.noResults);
+        Alert.alert(`${ALERT_MESSAGES.error}`, `${ALERT_MESSAGES.noResults}`, [{ text: `${ALERT_MESSAGES.ok}` }]);
     }
 
     ocultarTeclado() {
@@ -61,14 +61,17 @@ class SharedStateStore {
         }).start();
     }
 
-    async consultarClima() {
-        const { pais, ciudad } = this;
-
-        if (pais.trim() === '' || ciudad.trim() === '') {
+    consultarClima = () => {
+        if (this.ciudad.trim() === '' || this.pais.trim() === '') {
             this.mostrarAlerta();
             return;
         }
 
+        this.fetchClima();
+    }
+
+    async fetchClima() {
+        const { pais, ciudad } = this;
         const appId = '9e98f86b6c35e2b3a50d7cdcf47cac37';
         const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
 
@@ -97,7 +100,7 @@ class SharedStateStore {
                     this.setBgColor('rgb(178, 28, 61)');
                 }
             });
-            
+
             this.ocultarTeclado();
         } catch (error) {
             this.mostrarAlerta();

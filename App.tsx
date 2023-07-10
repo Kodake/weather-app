@@ -18,6 +18,8 @@ const App: React.FC = () => {
       <View style={[styles.app, { backgroundColor: store.bgColor }]}>
         <View style={styles.contenido}>
           {store.resultado && <Clima />}
+        </View>
+        <View style={styles.contenido}>
           <Formulario />
         </View>
       </View>
