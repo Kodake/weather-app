@@ -1,7 +1,8 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Alert, Animated, Keyboard } from 'react-native';
 import { Resultado } from '../interfaces/appInterfaces';
 import { ALERT_MESSAGES } from '../messages/appMessages';
+import axios from 'axios';
 
 class SharedStateStore {
     ciudad: string = '';
@@ -36,7 +37,7 @@ class SharedStateStore {
         this.consultar = consultar;
     }
 
-    setResultado(resultado: Resultado | null) {
+    setResultado(resultado: Resultado) {
         this.resultado = resultado;
     }
 
@@ -61,29 +62,28 @@ class SharedStateStore {
     }
 
     async consultarClima() {
-        if (this.pais.trim() === '' || this.ciudad.trim() === '') {
+        const { pais, ciudad } = this;
+
+        if (pais.trim() === '' || ciudad.trim() === '') {
             this.mostrarAlerta();
             return;
         }
 
-        this.setConsultar(true);
-        if (this.consultar) {
-            const appId = `9e98f86b6c35e2b3a50d7cdcf47cac37`;
-            const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.ciudad},${this.pais}&appid=${appId}`;
+        const appId = '9e98f86b6c35e2b3a50d7cdcf47cac37';
+        const url = `http://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
 
-            try {
-                const respuesta = await fetch(url);
-                const data = await respuesta.json();
-                const { name, main, weather } = data;
+        try {
+            const response = await axios.get(url);
+            const { name, main, weather } = response.data;
 
-                const climaData: Resultado = {
-                    name,
-                    main,
-                    weather,
-                };
+            const climaData = {
+                name,
+                main,
+                weather
+            };
 
+            runInAction(() => {
                 this.setResultado(climaData);
-                this.setConsultar(false);
 
                 const kelvin = 273.15;
                 const actual = main.temp - kelvin;
@@ -96,10 +96,11 @@ class SharedStateStore {
                 } else {
                     this.setBgColor('rgb(178, 28, 61)');
                 }
-                this.ocultarTeclado();
-            } catch (error) {
-                this.mostrarAlerta();
-            }
+            });
+            
+            this.ocultarTeclado();
+        } catch (error) {
+            this.mostrarAlerta();
         }
     }
 }
