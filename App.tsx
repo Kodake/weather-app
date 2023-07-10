@@ -15,12 +15,12 @@ const App: React.FC = () => {
 
   return (
     <>
-      {store.bgColor && <View style={[styles.app, { backgroundColor: store.bgColor }]}>
+      <View style={[styles.app, { backgroundColor: store.bgColor }]}>
         <View style={styles.contenido}>
           {store.resultado && <Clima />}
           <Formulario />
         </View>
-      </View>}
+      </View>
     </>
   );
 };

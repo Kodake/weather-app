@@ -19,7 +19,7 @@ const Formulario: React.FC = observer(() => {
                         style={styles.input}
                         onChangeText={(texto) => store.setCiudad(texto)}
                         placeholder="Ciudad"
-                        placeholderTextColor="#666"
+                        placeholderTextColor={'rgb(71, 149, 212)'}
                     />
                 </View>
                 <View>

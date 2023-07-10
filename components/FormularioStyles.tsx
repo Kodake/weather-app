@@ -4,10 +4,11 @@ export const styles = StyleSheet.create({
     input: {
         padding: 10,
         height: 50,
-        backgroundColor: '#FFF',
         fontSize: 20,
         marginBottom: 20,
         textAlign: 'center',
+        backgroundColor: '#FFF',
+        color: 'rgb(71, 149, 212)'
     },
     btnBuscar: {
         marginTop: 50,
@@ -25,5 +26,6 @@ export const styles = StyleSheet.create({
     selector: {
         height: 50,
         backgroundColor: '#FFF',
+        color: 'rgb(71, 149, 212)'
     },
 });
